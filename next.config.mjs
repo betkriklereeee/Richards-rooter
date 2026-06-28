@@ -13,7 +13,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: https:",
-              "frame-src https://www.google.com",
+              "frame-src https://www.openstreetmap.org https://www.google.com",
             ].join('; '),
           },
           { key: 'X-Frame-Options', value: 'DENY' },
