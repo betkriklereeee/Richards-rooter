@@ -1,49 +1,45 @@
-"use client";
+// City → [lat, lng]. Swap this component for a Google Maps version once an
+// API key is available — nothing else in the codebase needs to change.
+const CITY_COORDS: Record<string, [number, number]> = {
+  'Northridge, CA':     [34.2257, -118.5370],
+  'Los Angeles, CA':    [34.0522, -118.2437],
+  'Woodland Hills, CA': [34.1684, -118.6058],
+  'West Hollywood, CA': [34.0900, -118.3617],
+  'Beverly Hills, CA':  [34.0736, -118.4004],
+  'Hollywood, CA':      [34.0928, -118.3287],
+  'Century City, CA':   [34.0559, -118.4163],
+  'Santa Monica, CA':   [34.0195, -118.4912],
+  'Burbank, CA':        [34.1808, -118.3090],
+  'Sherman Oaks, CA':   [34.1508, -118.4496],
+  'Encino, CA':         [34.1595, -118.5011],
+};
 
-import { useEffect, useRef, useState } from "react";
+const DEFAULT: [number, number] = [34.2257, -118.5370]; // Northridge
 
-interface GoogleMapProps {
+export interface GoogleMapProps {
   city?: string;
   title?: string;
 }
 
-export default function GoogleMap({ city = "Northridge, CA", title = "Richards Rooter and Plumbing location map" }: GoogleMapProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
-      { rootMargin: "200px" }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
-
-  const q = encodeURIComponent(city === "Northridge, CA" ? "Richards Rooter & Plumbing, Northridge, CA" : city);
-  const src = apiKey
-    ? `https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${q}`
-    : `https://maps.google.com/maps?q=${q}&output=embed`;
+export default function GoogleMap({
+  city = 'Northridge, CA',
+  title = 'Richards Rooter and Plumbing location map',
+}: GoogleMapProps) {
+  const [lat, lng] = CITY_COORDS[city] ?? DEFAULT;
+  const bbox = `${lng - 0.02},${lat - 0.02},${lng + 0.02},${lat + 0.02}`;
+  const src = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lng}`;
 
   return (
-    <div ref={ref} className="w-full h-64 md:h-80 rounded-lg overflow-hidden bg-gray-100">
-      {visible ? (
-        <iframe
-          title={title}
-          src={src}
-          width="100%"
-          height="100%"
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          className="border-0"
-          aria-label={title}
-        />
-      ) : (
-        <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
-          Map loading…
-        </div>
-      )}
+    <div className="w-full h-64 md:h-80 rounded-lg overflow-hidden bg-gray-100">
+      <iframe
+        title={title}
+        width="100%"
+        height="100%"
+        src={src}
+        style={{ border: 0 }}
+        loading="lazy"
+        aria-label={title}
+      />
     </div>
   );
 }
