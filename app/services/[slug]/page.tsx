@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getServiceContent, getAllServiceSlugs } from "@/lib/serviceContent";
@@ -7,6 +6,20 @@ import { BUSINESS, SERVICES, SERVICE_IMAGES } from "@/lib/constants";
 import TrustBadges from "@/components/TrustBadges";
 import FAQAccordion from "@/components/FAQAccordion";
 import CallbackForm from "@/components/CallbackForm";
+
+const SERVICE_HERO_IMAGES: Record<string, string> = {
+  "drain-cleaning":           "https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=1200&q=80",
+  "water-heater-repair":      "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1200&q=80",
+  "water-heater-installation":"https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1200&q=80",
+  "tankless-water-heater":    "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=1200&q=80",
+  "gas-leak-detection":       "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=1200&q=80",
+  "sewer-cleaning":           "https://images.unsplash.com/photo-1603380353725-f8a4d39cc41e?w=1200&q=80",
+  "water-leak-detection":     "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=1200&q=80",
+  "pipe-repair":              "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1200&q=80",
+  "toilet-repair":            "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=1200&q=80",
+};
+
+const FALLBACK_HERO = "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80";
 
 export async function generateStaticParams() {
   return getAllServiceSlugs().map((slug) => ({ slug }));
@@ -34,36 +47,34 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   const service = getServiceContent(slug);
   if (!service) notFound();
 
-  const heroImg = SERVICE_IMAGES[slug];
+  const heroSrc = SERVICE_HERO_IMAGES[slug] ?? FALLBACK_HERO;
   const related = SERVICES.filter((s) => s.slug !== slug).slice(0, 4);
 
   return (
     <>
-      {/* Hero */}
-      {heroImg && (
-        <section className="relative bg-navy">
-          <div className="relative h-[400px] w-full overflow-hidden">
-            <Image
-              src={heroImg.src}
-              alt={heroImg.alt}
-              fill
-              className="object-cover object-center opacity-60"
-              fetchPriority="high"
-              priority
-            />
-          </div>
-          <div className="absolute inset-0 flex items-end">
-            <div className="max-w-6xl mx-auto px-4 pb-8 w-full">
-              <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow">{service.h1}</h1>
-            </div>
-          </div>
-        </section>
-      )}
+      {/* Hero — full-width, outside main container */}
+      <section className="relative w-full overflow-hidden" style={{ height: "400px" }}>
+        <img
+          src={heroSrc}
+          alt={`${service.name} in Los Angeles — Richards Rooter & Plumbing`}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
+          fetchPriority="high"
+        />
+        <div style={{ position: "absolute", inset: 0, backgroundColor: "rgba(10,31,68,0.72)" }} />
+        <div style={{ position: "relative", zIndex: 10, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", textAlign: "center", padding: "0 24px" }}>
+          <h1 style={{ color: "#fff", fontSize: "clamp(2rem, 5vw, 3.5rem)", fontWeight: 700, marginBottom: "16px", maxWidth: "800px" }}>
+            {service.name} in Los Angeles
+          </h1>
+          <p style={{ color: "rgba(255,255,255,0.9)", fontSize: "1.125rem", maxWidth: "600px" }}>
+            Available 24/7 — Call {BUSINESS.phone}
+          </p>
+        </div>
+      </section>
 
-      <div className="max-w-6xl mx-auto px-4 py-12">
+      {/* All non-hero content inside constrained main */}
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid md:grid-cols-3 gap-8">
           <div className="md:col-span-2">
-            {!heroImg && <h1 className="text-4xl font-bold text-navy mb-4">{service.h1}</h1>}
             <p className="text-lg text-gray-700 mb-4">{service.intro}</p>
             <p className="text-gray-700 mb-8">{service.body}</p>
 
@@ -83,20 +94,19 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
                     <Link
                       key={s.slug}
                       href={`/services/${s.slug}`}
-                      className="block bg-light-gray rounded border border-gray-200 hover:border-orange transition-colors group overflow-hidden"
+                      className="block rounded overflow-hidden border border-gray-200 hover:border-orange transition-colors group bg-light-gray"
                     >
-                      {img && (
-                        <div className="relative h-24 w-full overflow-hidden">
-                          <Image
+                      <div className="relative h-24 w-full overflow-hidden">
+                        {img && (
+                          <img
                             src={img.src}
-                            alt={img.alt}
-                            fill
-                            sizes="(max-width: 768px) 50vw, 25vw"
-                            className="object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                            alt={`${s.name} in Los Angeles`}
+                            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
+                            className="group-hover:scale-105 transition-transform duration-300"
                             loading="lazy"
                           />
-                        </div>
-                      )}
+                        )}
+                      </div>
                       <p className="p-3 text-sm font-medium text-navy group-hover:text-orange transition-colors">
                         {s.name} &rarr;
                       </p>
@@ -123,7 +133,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
             </div>
           </aside>
         </div>
-      </div>
+      </main>
     </>
   );
 }

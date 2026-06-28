@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getLocationContent, getAllLocationSlugs } from "@/lib/locationContent";
 import { BUSINESS, SERVICES } from "@/lib/constants";
@@ -34,26 +33,27 @@ export default async function LocationPage({ params }: { params: Promise<{ slug:
 
   return (
     <>
-      {/* Hero */}
-      <section className="relative bg-navy">
-        <div className="relative h-[400px] w-full overflow-hidden">
-          <Image
-            src="https://images.unsplash.com/photo-1534430480872-3498386e7856?w=1200&q=80"
-            alt={`Aerial view of ${loc.name}, Los Angeles — served by Richards Rooter & Plumbing`}
-            fill
-            className="object-cover object-center opacity-50"
-            fetchPriority="high"
-            priority
-          />
-        </div>
-        <div className="absolute inset-0 flex items-end">
-          <div className="max-w-6xl mx-auto px-4 pb-8 w-full">
-            <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow">{loc.h1}</h1>
-          </div>
+      {/* Hero — full-width, outside main container */}
+      <section className="relative w-full overflow-hidden" style={{ height: "400px" }}>
+        <img
+          src="https://images.unsplash.com/photo-1534430480872-3498386e7856?w=1200&q=80"
+          alt={`Aerial view of ${loc.name}, Los Angeles — served by Richards Rooter & Plumbing`}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
+          fetchPriority="high"
+        />
+        <div style={{ position: "absolute", inset: 0, backgroundColor: "rgba(10,31,68,0.72)" }} />
+        <div style={{ position: "relative", zIndex: 10, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", textAlign: "center", padding: "0 24px" }}>
+          <h1 style={{ color: "#fff", fontSize: "clamp(2rem, 5vw, 3.5rem)", fontWeight: 700, marginBottom: "16px", maxWidth: "800px" }}>
+            {loc.h1}
+          </h1>
+          <p style={{ color: "rgba(255,255,255,0.9)", fontSize: "1.125rem", maxWidth: "600px" }}>
+            Available 24/7 — Call {BUSINESS.phone}
+          </p>
         </div>
       </section>
 
-      <div className="max-w-6xl mx-auto px-4 py-12">
+      {/* All non-hero content inside constrained main */}
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <p className="text-lg text-gray-700 mb-4">{loc.body}</p>
         <p className="text-gray-600 mb-10">Serving {loc.landmarks}</p>
 
@@ -96,7 +96,7 @@ export default async function LocationPage({ params }: { params: Promise<{ slug:
           <h2 className="text-2xl font-bold text-navy mb-4">Request Service in {loc.name}</h2>
           <ContactForm />
         </div>
-      </div>
+      </main>
     </>
   );
 }
