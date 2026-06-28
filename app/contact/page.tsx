@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { BUSINESS } from "@/lib/constants";
 import ContactForm from "@/components/ContactForm";
 import CallbackForm from "@/components/CallbackForm";
@@ -19,27 +18,27 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
-      {/* Hero */}
-      <section className="relative bg-navy">
-        <div className="relative h-[360px] w-full overflow-hidden">
-          <Image
-            src="https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1200&q=80"
-            alt="Plumber on the phone providing 24/7 emergency plumbing service in Los Angeles"
-            fill
-            className="object-cover object-center opacity-40"
-            fetchPriority="high"
-            priority
-          />
-        </div>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-white px-4">
-            <h1 className="text-4xl font-bold drop-shadow mb-2">Contact Us</h1>
-            <p className="text-white/80 text-lg">Available 24/7 — {BUSINESS.phone}</p>
-          </div>
+      {/* Hero — full-width, outside main container */}
+      <section className="relative w-full overflow-hidden" style={{ height: "360px" }}>
+        <img
+          src="https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1200&q=80"
+          alt="Plumber on the phone providing 24/7 emergency plumbing service in Los Angeles"
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
+          fetchPriority="high"
+        />
+        <div style={{ position: "absolute", inset: 0, backgroundColor: "rgba(10,31,68,0.72)" }} />
+        <div style={{ position: "relative", zIndex: 10, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", textAlign: "center", padding: "0 24px" }}>
+          <h1 style={{ color: "#fff", fontSize: "clamp(2rem, 5vw, 3.5rem)", fontWeight: 700, marginBottom: "16px", maxWidth: "800px" }}>
+            Contact Us
+          </h1>
+          <p style={{ color: "rgba(255,255,255,0.9)", fontSize: "1.125rem", maxWidth: "600px" }}>
+            Available 24/7 — {BUSINESS.phone}
+          </p>
         </div>
       </section>
 
-      <div className="max-w-6xl mx-auto px-4 py-12">
+      {/* All non-hero content inside constrained main */}
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <p className="text-lg text-gray-700 mb-10">
           For plumbing emergencies in Los Angeles, call Richard directly at{" "}
           <a href={BUSINESS.phoneTel} className="text-orange font-bold hover:underline">{BUSINESS.phone}</a>.
@@ -71,7 +70,7 @@ export default function ContactPage() {
           <h2 className="text-2xl font-bold text-navy mb-4">Find Us</h2>
           <GoogleMap />
         </div>
-      </div>
+      </main>
     </>
   );
 }

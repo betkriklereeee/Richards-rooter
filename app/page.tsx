@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { BUSINESS, SERVICES, SERVICE_IMAGES } from "@/lib/constants";
 import TrustBadges from "@/components/TrustBadges";
@@ -57,44 +56,39 @@ export default function HomePage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(plumberSchema) }} />
 
-      {/* Hero */}
-      <section className="relative bg-navy text-white">
-        <div className="relative h-[560px] w-full overflow-hidden">
-          <Image
-            src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80"
-            alt="Licensed plumber working on pipes in a Los Angeles home"
-            fill
-            className="object-cover object-center opacity-25"
-            fetchPriority="high"
-            priority
-          />
-        </div>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="max-w-4xl mx-auto px-4 py-20 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-              24/7 Emergency Plumber<br />in Los Angeles
-            </h1>
-            <p className="text-lg md:text-xl text-white/80 mb-10 max-w-2xl mx-auto">
-              Richard Yazmajian has been serving Los Angeles homeowners since 1994 — over 30 years of licensed, reliable plumbing expertise available around the clock.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <CTAButton variant="primary" sourcePage="/" />
-              <CTAButton variant="secondary" sourcePage="/" />
-            </div>
+      {/* Hero — full-width, outside main container */}
+      <section className="relative w-full overflow-hidden" style={{ height: "560px" }}>
+        <img
+          src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80"
+          alt="Licensed emergency plumber in Los Angeles"
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
+          fetchPriority="high"
+        />
+        <div style={{ position: "absolute", inset: 0, backgroundColor: "rgba(10,31,68,0.72)" }} />
+        <div style={{ position: "relative", zIndex: 10, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", textAlign: "center", padding: "0 24px" }}>
+          <h1 style={{ color: "#fff", fontSize: "clamp(2rem, 5vw, 3.5rem)", fontWeight: 700, marginBottom: "16px", maxWidth: "800px" }}>
+            24/7 Emergency Plumber in Los Angeles
+          </h1>
+          <p style={{ color: "rgba(255,255,255,0.9)", fontSize: "1.125rem", maxWidth: "600px", marginBottom: "32px" }}>
+            Richard Yazmajian has been serving LA homeowners since 1994 — over 30 years of licensed, reliable plumbing expertise available around the clock.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <CTAButton variant="primary" sourcePage="/" />
+            <CTAButton variant="secondary" sourcePage="/" />
           </div>
         </div>
       </section>
 
-      {/* Trust Badges */}
-      <section className="py-10 px-4 bg-light-gray">
-        <div className="max-w-4xl mx-auto">
-          <TrustBadges />
-        </div>
-      </section>
+      {/* All non-hero content inside constrained main */}
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
-      {/* Services Grid */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
+        {/* Trust Badges */}
+        <section className="py-10">
+          <TrustBadges />
+        </section>
+
+        {/* Services Grid */}
+        <section className="py-16 border-t border-gray-100">
           <h2 className="text-3xl font-bold text-navy text-center mb-10">Our Plumbing Services</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {SERVICES.slice(0, 6).map((service) => {
@@ -103,93 +97,89 @@ export default function HomePage() {
                 <Link
                   key={service.slug}
                   href={`/services/${service.slug}`}
-                  className="block bg-white border border-gray-100 rounded-lg shadow-sm hover:shadow-md hover:border-orange transition-all group overflow-hidden"
+                  className="block rounded-lg overflow-hidden shadow-md border border-gray-100 hover:shadow-lg hover:border-orange transition-all group bg-white"
                 >
-                  {img && (
-                    <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
-                      <Image
+                  <div className="relative h-48 w-full overflow-hidden">
+                    {img && (
+                      <img
                         src={img.src}
-                        alt={img.alt}
-                        fill
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        className="object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                        alt={`${service.name} in Los Angeles`}
+                        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
+                        className="group-hover:scale-105 transition-transform duration-300"
                         loading="lazy"
                       />
-                    </div>
-                  )}
+                    )}
+                  </div>
                   <div className="p-5">
-                    <h3 className="font-bold text-navy group-hover:text-orange transition-colors">{service.name}</h3>
-                    <p className="text-sm text-gray-500 mt-1">Professional service in Los Angeles &rarr;</p>
+                    <h3 className="font-bold text-lg text-navy group-hover:text-orange transition-colors">{service.name}</h3>
+                    <p className="text-gray-600 text-sm mt-1">Professional service in Los Angeles &rarr;</p>
                   </div>
                 </Link>
               );
             })}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* About Richard */}
-      <section className="py-16 px-4 bg-light-gray">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 items-center">
-          <div>
-            <h2 className="text-3xl font-bold text-navy mb-4">Meet Richard Yazmajian</h2>
-            <p className="text-gray-700 mb-3">
-              Richard has been a licensed plumbing contractor in California since 1994, building Richards Rooter &amp; Plumbing into one of the most trusted names in the San Fernando Valley.
-            </p>
-            <p className="text-gray-700 mb-3">
-              Based in Northridge, Richard specializes in residential plumbing and was one of the first plumbers in Los Angeles to install tankless water heaters — back in the early 1990s when the technology was just emerging.
-            </p>
-            <p className="text-gray-700 mb-6">
-              Every job is handled personally by Richard. No subcontractors. No surprises. Just honest, expert plumbing from a 30-year LA veteran.
-            </p>
-            <CTAButton variant="secondary" sourcePage="/" />
+        {/* About Richard */}
+        <section className="py-16 border-t border-gray-100">
+          <div className="grid md:grid-cols-2 gap-10 items-center">
+            <div>
+              <h2 className="text-3xl font-bold text-navy mb-4">Meet Richard Yazmajian</h2>
+              <p className="text-gray-700 mb-3">
+                Richard has been a licensed plumbing contractor in California since 1994, building Richards Rooter &amp; Plumbing into one of the most trusted names in the San Fernando Valley.
+              </p>
+              <p className="text-gray-700 mb-3">
+                Based in Northridge, Richard specializes in residential plumbing and was one of the first plumbers in Los Angeles to install tankless water heaters — back in the early 1990s when the technology was just emerging.
+              </p>
+              <p className="text-gray-700 mb-6">
+                Every job is handled personally by Richard. No subcontractors. No surprises. Just honest, expert plumbing from a 30-year LA veteran.
+              </p>
+              <CTAButton variant="secondary" sourcePage="/" />
+            </div>
+            <div style={{ position: "relative", height: "320px", width: "100%", overflow: "hidden", borderRadius: "12px" }}>
+              <img
+                src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&q=80"
+                alt="Richard Yazmajian, licensed plumber and owner of Richards Rooter & Plumbing, inspecting a water heater"
+                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
+                loading="lazy"
+              />
+            </div>
           </div>
-          <div className="relative h-64 w-full overflow-hidden rounded-xl shadow-lg">
-            <Image
-              src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&q=80"
-              alt="Richard Yazmajian, licensed plumber and owner of Richards Rooter & Plumbing, inspecting a water heater"
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover object-center"
-              loading="lazy"
-            />
-          </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Google Reviews */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
+        {/* Google Reviews */}
+        <section className="py-16 border-t border-gray-100">
           <h2 className="text-3xl font-bold text-navy text-center mb-8">What Los Angeles Customers Say</h2>
           <GoogleReviews />
-        </div>
-      </section>
+        </section>
 
-      {/* FAQ */}
-      <section className="py-16 px-4 bg-light-gray">
-        <div className="max-w-3xl mx-auto">
+        {/* FAQ */}
+        <section className="py-16 border-t border-gray-100">
           <h2 className="text-3xl font-bold text-navy text-center mb-8">Frequently Asked Questions</h2>
-          <FAQAccordion faqs={homeFaqs} />
-        </div>
-      </section>
+          <div className="max-w-3xl mx-auto">
+            <FAQAccordion faqs={homeFaqs} />
+          </div>
+        </section>
 
-      {/* Service Area Map */}
-      <section className="py-16 px-4">
-        <div className="max-w-4xl mx-auto">
+        {/* Service Area Map */}
+        <section className="py-16 border-t border-gray-100">
           <h2 className="text-3xl font-bold text-navy text-center mb-4">Serving All of Los Angeles</h2>
           <p className="text-center text-gray-600 mb-8">From the San Fernando Valley to the Westside — Richard comes to you, 24/7.</p>
           <GoogleMap />
-        </div>
-      </section>
+        </section>
 
-      {/* Contact Form */}
-      <section className="py-16 px-4 bg-light-gray" id="contact">
-        <div className="max-w-xl mx-auto">
-          <h2 className="text-3xl font-bold text-navy text-center mb-2">Request a Free Quote</h2>
-          <p className="text-center text-gray-600 mb-8">Or call us directly at <a href={BUSINESS.phoneTel} className="text-orange font-bold hover:underline">{BUSINESS.phone}</a></p>
-          <ContactForm />
-        </div>
-      </section>
+        {/* Contact Form */}
+        <section className="py-16 border-t border-gray-100" id="contact">
+          <div className="max-w-xl mx-auto">
+            <h2 className="text-3xl font-bold text-navy text-center mb-2">Request a Free Quote</h2>
+            <p className="text-center text-gray-600 mb-8">
+              Or call us directly at <a href={BUSINESS.phoneTel} className="text-orange font-bold hover:underline">{BUSINESS.phone}</a>
+            </p>
+            <ContactForm />
+          </div>
+        </section>
+
+      </main>
     </>
   );
 }

@@ -30,13 +30,15 @@ const faqs = [
 
 export default function FAQPage() {
   return (
-    <div className="max-w-3xl mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold text-navy mb-4">Plumbing FAQ — Los Angeles</h1>
-      <p className="text-lg text-gray-700 mb-8">
-        Questions from LA homeowners, answered by Richard Yazmajian — licensed plumber with 30+ years in Los Angeles.
-        For urgent help, call <a href={BUSINESS.phoneTel} className="text-orange font-bold hover:underline">{BUSINESS.phone}</a>.
-      </p>
-      <FAQAccordion faqs={faqs} headingLevel="h2" />
-    </div>
+    <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-3xl mx-auto">
+        <h1 className="text-4xl font-bold text-navy mb-4">Plumbing FAQ — Los Angeles</h1>
+        <p className="text-lg text-gray-700 mb-8">
+          Questions from LA homeowners, answered by Richard Yazmajian — licensed plumber with 30+ years in Los Angeles.
+          For urgent help, call <a href={BUSINESS.phoneTel} className="text-orange font-bold hover:underline">{BUSINESS.phone}</a>.
+        </p>
+        <FAQAccordion faqs={faqs} headingLevel="h2" />
+      </div>
+    </main>
   );
 }
