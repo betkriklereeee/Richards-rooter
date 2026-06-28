@@ -1,70 +1,63 @@
-"use client";
+'use client';
 
-import { useEffect, useId } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
-
-// Fix Leaflet's default icon paths broken by webpack/Next.js bundling
-delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-  iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-});
+import { useEffect, useRef } from 'react';
 
 export interface LeafletMapProps {
   lat: number;
   lng: number;
   title: string;
-  popupText: string;
 }
 
-// Recenter when props change (e.g. different location page without full remount)
-function RecenterOnChange({ lat, lng }: { lat: number; lng: number }) {
-  const map = useMap();
-  useEffect(() => {
-    map.setView([lat, lng], map.getZoom());
-  }, [lat, lng, map]);
-  return null;
-}
+export default function LeafletMap({ lat, lng, title }: LeafletMapProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<ReturnType<typeof import('leaflet')['map']> | null>(null);
 
-// Calls map.remove() when the component unmounts, preventing the
-// "Map container is already initialized" error on client-side navigation.
-function MapCleanup() {
-  const map = useMap();
   useEffect(() => {
+    if (!containerRef.current || mapRef.current) return;
+
+    import('leaflet').then((L) => {
+      // Guard against React Strict Mode double-invocation or race conditions
+      if (!containerRef.current || mapRef.current) return;
+
+      // Fix default marker icons broken by webpack asset hashing
+      const DefaultIcon = L.icon({
+        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+        iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41],
+      });
+
+      mapRef.current = L.map(containerRef.current).setView([lat, lng], 13);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(mapRef.current);
+
+      L.marker([lat, lng], { icon: DefaultIcon })
+        .addTo(mapRef.current)
+        .bindPopup(title);
+    });
+
     return () => {
-      map.remove();
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
     };
-  }, [map]);
-  return null;
-}
-
-export default function LeafletMap({ lat, lng, title, popupText }: LeafletMapProps) {
-  // Unique id per instance so Leaflet never tries to reuse a stale container
-  const uid = useId().replace(/:/g, "");
-  const containerId = `leaflet-map-${uid}`;
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // Empty deps: we only ever initialise once. The container ref is stable
+  // and lat/lng/title are captured at mount — navigation triggers a full
+  // remount via the key prop on the parent, not a re-run of this effect.
 
   return (
-    <MapContainer
-      key={`${lat}-${lng}`}
-      id={containerId}
-      center={[lat, lng]}
-      zoom={13}
-      scrollWheelZoom={false}
-      style={{ height: "100%", width: "100%" }}
+    <div
+      ref={containerRef}
+      style={{ height: '100%', width: '100%' }}
       aria-label={title}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <Marker position={[lat, lng]}>
-        <Popup>{popupText}</Popup>
-      </Marker>
-      <RecenterOnChange lat={lat} lng={lng} />
-      <MapCleanup />
-    </MapContainer>
+      role="application"
+    />
   );
 }
