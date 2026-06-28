@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { BUSINESS, SERVICES } from "@/lib/constants";
+import { BUSINESS, SERVICES, SERVICE_IMAGES } from "@/lib/constants";
 import TrustBadges from "@/components/TrustBadges";
 import GoogleReviews from "@/components/GoogleReviews";
 import FAQAccordion from "@/components/FAQAccordion";
@@ -56,23 +57,25 @@ export default function HomePage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(plumberSchema) }} />
 
-      {/* Hero */}
-      <section className="bg-navy text-white py-16 px-4">
-        <div className="max-w-4xl mx-auto text-center">
+      {/* Hero — native <img> so fetchpriority="high" works without Next.js wrapping it */}
+      <section className="relative bg-navy text-white">
+        <div className="absolute inset-0 overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80"
+            alt="Licensed plumber working on pipes in a Los Angeles home"
+            width={1200}
+            height={600}
+            fetchPriority="high"
+            className="w-full h-full object-cover opacity-25"
+          />
+        </div>
+        <div className="relative max-w-4xl mx-auto px-4 py-20 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
             24/7 Emergency Plumber<br />in Los Angeles
           </h1>
-          <p className="text-lg md:text-xl text-white/80 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-white/80 mb-10 max-w-2xl mx-auto">
             Richard Yazmajian has been serving Los Angeles homeowners since 1994 — over 30 years of licensed, reliable plumbing expertise available around the clock.
           </p>
-          <img
-            src="https://placehold.co/800x400/0A1F44/F97316?text=Richards+Rooter+%26+Plumbing"
-            alt="Richard Yazmajian, licensed plumber in Los Angeles since 1994"
-            width={800}
-            height={400}
-            fetchPriority="high"
-            className="rounded-lg mx-auto mb-8 w-full max-w-2xl"
-          />
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <CTAButton variant="primary" sourcePage="/" />
             <CTAButton variant="secondary" sourcePage="/" />
@@ -92,23 +95,40 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-navy text-center mb-10">Our Plumbing Services</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {SERVICES.slice(0, 6).map((service) => (
-              <Link
-                key={service.slug}
-                href={`/services/${service.slug}`}
-                className="block p-6 bg-white border border-gray-100 rounded-lg shadow-sm hover:shadow-md hover:border-orange transition-all group"
-              >
-                <h3 className="font-bold text-navy group-hover:text-orange transition-colors">{service.name}</h3>
-                <p className="text-sm text-gray-500 mt-1">Professional service in Los Angeles &rarr;</p>
-              </Link>
-            ))}
+            {SERVICES.slice(0, 6).map((service) => {
+              const img = SERVICE_IMAGES[service.slug];
+              return (
+                <Link
+                  key={service.slug}
+                  href={`/services/${service.slug}`}
+                  className="block bg-white border border-gray-100 rounded-lg shadow-sm hover:shadow-md hover:border-orange transition-all group overflow-hidden"
+                >
+                  {img && (
+                    <div className="relative h-40 overflow-hidden">
+                      <Image
+                        src={img.src}
+                        alt={img.alt}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+                  <div className="p-5">
+                    <h3 className="font-bold text-navy group-hover:text-orange transition-colors">{service.name}</h3>
+                    <p className="text-sm text-gray-500 mt-1">Professional service in Los Angeles &rarr;</p>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* About Richard */}
       <section className="py-16 px-4 bg-light-gray">
-        <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 items-center">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 items-center">
           <div>
             <h2 className="text-3xl font-bold text-navy mb-4">Meet Richard Yazmajian</h2>
             <p className="text-gray-700 mb-3">
@@ -122,14 +142,14 @@ export default function HomePage() {
             </p>
             <CTAButton variant="secondary" sourcePage="/" />
           </div>
-          <div>
-            <img
-              src="https://placehold.co/400x400/0A1F44/FFFFFF?text=Richard+Yazmajian"
-              alt="Richard Yazmajian, owner of Richards Rooter and Plumbing"
-              width={400}
-              height={400}
+          <div className="relative rounded-xl overflow-hidden shadow-lg">
+            <Image
+              src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&q=80"
+              alt="Richard Yazmajian, licensed plumber and owner of Richards Rooter & Plumbing, inspecting a water heater"
+              width={600}
+              height={500}
               loading="lazy"
-              className="rounded-lg w-full max-w-sm mx-auto"
+              className="w-full h-auto object-cover"
             />
           </div>
         </div>

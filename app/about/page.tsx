@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { BUSINESS } from "@/lib/constants";
 import TrustBadges from "@/components/TrustBadges";
 import GoogleReviews from "@/components/GoogleReviews";
@@ -15,56 +16,154 @@ export const metadata: Metadata = {
   },
 };
 
+const valueCards = [
+  {
+    title: "Licensed & Bonded",
+    description: "CA licensed plumbing contractor, fully insured. Richard holds all required California state certifications and keeps them current.",
+    icon: (
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        <path d="M9 12l2 2 4-4" />
+      </svg>
+    ),
+  },
+  {
+    title: "Residential Specialist",
+    description: "Single-family homes, condos, and multi-unit properties across greater Los Angeles. Richard focuses on residential work where his expertise runs deepest.",
+    icon: (
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+        <polyline points="9 22 9 12 15 12 15 22" />
+      </svg>
+    ),
+  },
+  {
+    title: "Tankless Pioneer",
+    description: "Installing and servicing tankless water heaters since before they were mainstream — Richard has been doing it since the early 1990s, longer than almost any plumber in LA.",
+    icon: (
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+      </svg>
+    ),
+  },
+];
+
 export default function AboutPage() {
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold text-navy mb-8">About Richard Yazmajian</h1>
-
-      <div className="grid md:grid-cols-2 gap-8 items-start mb-12">
-        <div>
+    <>
+      {/* Hero */}
+      <section className="relative bg-navy text-white">
+        <div className="absolute inset-0 overflow-hidden">
           <img
-            src="https://placehold.co/400x400/0A1F44/FFFFFF?text=Richard+Yazmajian"
-            alt="Richard Yazmajian, owner of Richards Rooter and Plumbing, licensed plumber in Los Angeles"
-            width={400}
-            height={400}
-            loading="lazy"
-            className="rounded-lg w-full"
+            src="https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=1200&q=80"
+            alt="Professional plumber at work in a Los Angeles home"
+            width={1200}
+            height={500}
+            fetchPriority="high"
+            className="w-full h-full object-cover opacity-20"
           />
         </div>
-        <div>
-          <h2 className="text-2xl font-bold text-navy mb-3">30 Years. One Plumber. Thousands of Satisfied LA Homeowners.</h2>
-          <p className="text-gray-700 mb-3">
-            Richard Yazmajian founded Richards Rooter &amp; Plumbing in 1994 with a simple philosophy: show up on time, diagnose accurately, fix it right, and charge a fair price. Over 30 years later, that approach is still what drives every call.
+        <div className="relative max-w-4xl mx-auto px-4 py-20 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+            30 Years of Trusted Plumbing<br />in Los Angeles
+          </h1>
+          <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto">
+            Richard Yazmajian has been serving LA homeowners since 1994 — one job at a time.
           </p>
-          <p className="text-gray-700 mb-3">
-            Based in Northridge, Richard serves all of greater Los Angeles — from the San Fernando Valley to the Westside, from Burbank to Santa Monica. Every job is handled personally by Richard. No dispatched subcontractors. No surprises on the invoice.
-          </p>
-          <p className="text-gray-700 mb-6">
-            Richard is a fully licensed, bonded, and insured plumbing contractor in California. He keeps his certifications current and stays up to date with Los Angeles building codes and water efficiency requirements.
-          </p>
-          <CTAButton variant="primary" sourcePage="/about" />
         </div>
-      </div>
-
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold text-navy mb-4">Tankless Water Heater Pioneer</h2>
-        <p className="text-gray-700 mb-3">
-          Most plumbers in Los Angeles didn't start installing tankless water heaters until the mid-2000s. Richard was doing it in the early 1990s — when the technology had barely arrived in the US market and the installation manuals were still being translated from Japanese.
-        </p>
-        <p className="text-gray-700">
-          That head start means Richard has more real-world tankless experience than almost anyone in the LA area. He has seen the technology evolve across four generations of products and knows what fails, what lasts, and what's worth the investment for different households.
-        </p>
       </section>
 
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold text-navy mb-4">Why Los Angeles Homeowners Choose Richard</h2>
-        <TrustBadges />
+      {/* Richard's story */}
+      <section className="py-16 px-4">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 items-center">
+          <div className="relative rounded-xl overflow-hidden shadow-lg">
+            <Image
+              src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80"
+              alt="Richard Yazmajian, licensed plumber and owner of Richards Rooter & Plumbing in Northridge, CA"
+              width={600}
+              height={600}
+              loading="lazy"
+              className="w-full h-auto object-cover"
+            />
+          </div>
+          <div>
+            <h2 className="text-3xl font-bold text-navy mb-5">
+              30 Years. One Plumber.<br />Thousands of Satisfied LA Homeowners.
+            </h2>
+            <p className="text-gray-700 mb-4">
+              Richard Yazmajian founded Richards Rooter &amp; Plumbing in 1994 after studying Plumbing Technology at LA Trade Technical College. Based in Northridge, he built his reputation one referral at a time across the San Fernando Valley and greater Los Angeles.
+            </p>
+            <p className="text-gray-700 mb-4">
+              He was an early adopter of tankless water heater technology in the early 1990s and has remained a specialist ever since — long before most LA plumbers had even seen a tankless unit in person.
+            </p>
+            <p className="text-gray-700 mb-6">
+              Today he brings 30+ years of hands-on experience to every job — residential focus, no shortcuts, and no subcontractors. When you call Richards Rooter &amp; Plumbing, Richard picks up the phone and Richard shows up at your door.
+            </p>
+            <CTAButton variant="primary" sourcePage="/about" />
+          </div>
+        </div>
       </section>
 
-      <section>
-        <h2 className="text-2xl font-bold text-navy mb-6">What Customers Say</h2>
-        <GoogleReviews />
+      {/* Value cards */}
+      <section className="py-16 px-4 bg-light-gray">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl font-bold text-navy text-center mb-10">What Sets Richard Apart</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            {valueCards.map((card) => (
+              <div key={card.title} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 flex flex-col items-start gap-4">
+                <div className="text-navy">{card.icon}</div>
+                <h3 className="text-xl font-bold text-navy">{card.title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">{card.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
-    </div>
+
+      {/* Credentials / trust photo */}
+      <section className="py-16 px-4">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 items-center">
+          <div>
+            <h2 className="text-3xl font-bold text-navy mb-5">Why Los Angeles Homeowners Choose Richard</h2>
+            <p className="text-gray-700 mb-6">
+              In a city full of plumbers, Richard stands out for the same reasons he did in 1994: he answers his own phone, arrives when he says he will, and charges what he quoted. No bait-and-switch. No unnecessary upsells. Just honest work.
+            </p>
+            <TrustBadges />
+          </div>
+          <div className="relative rounded-xl overflow-hidden shadow-lg">
+            <Image
+              src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&q=80"
+              alt="Licensed plumber inspecting water heater installation in a Los Angeles residential home"
+              width={600}
+              height={450}
+              loading="lazy"
+              className="w-full h-auto object-cover"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Reviews */}
+      <section className="py-16 px-4 bg-light-gray">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-navy text-center mb-8">What Customers Say</h2>
+          <GoogleReviews />
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-16 px-4 bg-navy text-white text-center">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-3xl font-bold mb-4">Ready to Work With Richard?</h2>
+          <p className="text-white/80 mb-8">
+            Available 24/7, 365 days a year. Free estimates on all plumbing work across greater Los Angeles.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <CTAButton variant="primary" sourcePage="/about" />
+            <CTAButton variant="secondary" sourcePage="/about" />
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
