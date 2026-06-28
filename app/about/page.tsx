@@ -53,37 +53,39 @@ export default function AboutPage() {
     <>
       {/* Hero */}
       <section className="relative bg-navy text-white">
-        <div className="absolute inset-0 overflow-hidden">
-          <img
+        <div className="relative h-[480px] w-full overflow-hidden">
+          <Image
             src="https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=1200&q=80"
             alt="Professional plumber at work in a Los Angeles home"
-            width={1200}
-            height={500}
+            fill
+            className="object-cover object-center opacity-20"
             fetchPriority="high"
-            className="w-full h-full object-cover opacity-20"
+            priority
           />
         </div>
-        <div className="relative max-w-4xl mx-auto px-4 py-20 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-            30 Years of Trusted Plumbing<br />in Los Angeles
-          </h1>
-          <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto">
-            Richard Yazmajian has been serving LA homeowners since 1994 — one job at a time.
-          </p>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="max-w-4xl mx-auto px-4 text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+              30 Years of Trusted Plumbing<br />in Los Angeles
+            </h1>
+            <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto">
+              Richard Yazmajian has been serving LA homeowners since 1994 — one job at a time.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* Richard's story */}
       <section className="py-16 px-4">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 items-center">
-          <div className="relative rounded-xl overflow-hidden shadow-lg">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 items-start">
+          <div className="relative h-[480px] w-full overflow-hidden rounded-xl shadow-lg">
             <Image
               src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80"
               alt="Richard Yazmajian, licensed plumber and owner of Richards Rooter & Plumbing in Northridge, CA"
-              width={600}
-              height={600}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover object-top"
               loading="lazy"
-              className="w-full h-auto object-cover"
             />
           </div>
           <div>
@@ -130,14 +132,14 @@ export default function AboutPage() {
             </p>
             <TrustBadges />
           </div>
-          <div className="relative rounded-xl overflow-hidden shadow-lg">
+          <div className="relative h-64 w-full overflow-hidden rounded-xl shadow-lg">
             <Image
               src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&q=80"
               alt="Licensed plumber inspecting water heater installation in a Los Angeles residential home"
-              width={600}
-              height={450}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover object-center"
               loading="lazy"
-              className="w-full h-auto object-cover"
             />
           </div>
         </div>

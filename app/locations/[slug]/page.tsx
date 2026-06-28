@@ -35,21 +35,23 @@ export default async function LocationPage({ params }: { params: Promise<{ slug:
   return (
     <>
       {/* Hero */}
-      <div className="relative h-56 md:h-72 w-full overflow-hidden bg-navy">
-        <img
-          src="https://images.unsplash.com/photo-1534430480872-3498386e7856?w=1200&q=80"
-          alt={`Aerial view of ${loc.name}, Los Angeles — served by Richards Rooter & Plumbing`}
-          width={1200}
-          height={400}
-          fetchPriority="high"
-          className="w-full h-full object-cover opacity-50"
-        />
+      <section className="relative bg-navy">
+        <div className="relative h-[400px] w-full overflow-hidden">
+          <Image
+            src="https://images.unsplash.com/photo-1534430480872-3498386e7856?w=1200&q=80"
+            alt={`Aerial view of ${loc.name}, Los Angeles — served by Richards Rooter & Plumbing`}
+            fill
+            className="object-cover object-center opacity-50"
+            fetchPriority="high"
+            priority
+          />
+        </div>
         <div className="absolute inset-0 flex items-end">
           <div className="max-w-6xl mx-auto px-4 pb-8 w-full">
             <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow">{loc.h1}</h1>
           </div>
         </div>
-      </div>
+      </section>
 
       <div className="max-w-6xl mx-auto px-4 py-12">
         <p className="text-lg text-gray-700 mb-4">{loc.body}</p>

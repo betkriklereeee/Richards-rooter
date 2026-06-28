@@ -39,23 +39,25 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
   return (
     <>
-      {/* Hero image */}
+      {/* Hero */}
       {heroImg && (
-        <div className="relative h-64 md:h-80 w-full overflow-hidden bg-navy">
-          <img
-            src={heroImg.src}
-            alt={heroImg.alt}
-            width={1200}
-            height={400}
-            fetchPriority="high"
-            className="w-full h-full object-cover opacity-60"
-          />
+        <section className="relative bg-navy">
+          <div className="relative h-[400px] w-full overflow-hidden">
+            <Image
+              src={heroImg.src}
+              alt={heroImg.alt}
+              fill
+              className="object-cover object-center opacity-60"
+              fetchPriority="high"
+              priority
+            />
+          </div>
           <div className="absolute inset-0 flex items-end">
             <div className="max-w-6xl mx-auto px-4 pb-8 w-full">
               <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow">{service.h1}</h1>
             </div>
           </div>
-        </div>
+        </section>
       )}
 
       <div className="max-w-6xl mx-auto px-4 py-12">
@@ -84,13 +86,13 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
                       className="block bg-light-gray rounded border border-gray-200 hover:border-orange transition-colors group overflow-hidden"
                     >
                       {img && (
-                        <div className="relative h-24 overflow-hidden">
+                        <div className="relative h-24 w-full overflow-hidden">
                           <Image
                             src={img.src}
                             alt={img.alt}
                             fill
                             sizes="(max-width: 768px) 50vw, 25vw"
-                            className="object-cover group-hover:scale-105 transition-transform duration-300"
+                            className="object-cover object-center group-hover:scale-105 transition-transform duration-300"
                             loading="lazy"
                           />
                         </div>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { BUSINESS } from "@/lib/constants";
 import ContactForm from "@/components/ContactForm";
 import CallbackForm from "@/components/CallbackForm";
@@ -19,22 +20,24 @@ export default function ContactPage() {
   return (
     <>
       {/* Hero */}
-      <div className="relative h-48 md:h-64 w-full overflow-hidden bg-navy">
-        <img
-          src="https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1200&q=80"
-          alt="Plumber on the phone providing 24/7 emergency plumbing service in Los Angeles"
-          width={1200}
-          height={400}
-          fetchPriority="high"
-          className="w-full h-full object-cover opacity-40"
-        />
+      <section className="relative bg-navy">
+        <div className="relative h-[360px] w-full overflow-hidden">
+          <Image
+            src="https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1200&q=80"
+            alt="Plumber on the phone providing 24/7 emergency plumbing service in Los Angeles"
+            fill
+            className="object-cover object-center opacity-40"
+            fetchPriority="high"
+            priority
+          />
+        </div>
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-white">
+          <div className="text-center text-white px-4">
             <h1 className="text-4xl font-bold drop-shadow mb-2">Contact Us</h1>
             <p className="text-white/80 text-lg">Available 24/7 — {BUSINESS.phone}</p>
           </div>
         </div>
-      </div>
+      </section>
 
       <div className="max-w-6xl mx-auto px-4 py-12">
         <p className="text-lg text-gray-700 mb-10">

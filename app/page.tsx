@@ -57,28 +57,30 @@ export default function HomePage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(plumberSchema) }} />
 
-      {/* Hero — native <img> so fetchpriority="high" works without Next.js wrapping it */}
+      {/* Hero */}
       <section className="relative bg-navy text-white">
-        <div className="absolute inset-0 overflow-hidden">
-          <img
+        <div className="relative h-[560px] w-full overflow-hidden">
+          <Image
             src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80"
             alt="Licensed plumber working on pipes in a Los Angeles home"
-            width={1200}
-            height={600}
+            fill
+            className="object-cover object-center opacity-25"
             fetchPriority="high"
-            className="w-full h-full object-cover opacity-25"
+            priority
           />
         </div>
-        <div className="relative max-w-4xl mx-auto px-4 py-20 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-            24/7 Emergency Plumber<br />in Los Angeles
-          </h1>
-          <p className="text-lg md:text-xl text-white/80 mb-10 max-w-2xl mx-auto">
-            Richard Yazmajian has been serving Los Angeles homeowners since 1994 — over 30 years of licensed, reliable plumbing expertise available around the clock.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <CTAButton variant="primary" sourcePage="/" />
-            <CTAButton variant="secondary" sourcePage="/" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="max-w-4xl mx-auto px-4 py-20 text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+              24/7 Emergency Plumber<br />in Los Angeles
+            </h1>
+            <p className="text-lg md:text-xl text-white/80 mb-10 max-w-2xl mx-auto">
+              Richard Yazmajian has been serving Los Angeles homeowners since 1994 — over 30 years of licensed, reliable plumbing expertise available around the clock.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <CTAButton variant="primary" sourcePage="/" />
+              <CTAButton variant="secondary" sourcePage="/" />
+            </div>
           </div>
         </div>
       </section>
@@ -104,13 +106,13 @@ export default function HomePage() {
                   className="block bg-white border border-gray-100 rounded-lg shadow-sm hover:shadow-md hover:border-orange transition-all group overflow-hidden"
                 >
                   {img && (
-                    <div className="relative h-40 overflow-hidden">
+                    <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
                       <Image
                         src={img.src}
                         alt={img.alt}
                         fill
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="object-cover object-center group-hover:scale-105 transition-transform duration-300"
                         loading="lazy"
                       />
                     </div>
@@ -142,14 +144,14 @@ export default function HomePage() {
             </p>
             <CTAButton variant="secondary" sourcePage="/" />
           </div>
-          <div className="relative rounded-xl overflow-hidden shadow-lg">
+          <div className="relative h-64 w-full overflow-hidden rounded-xl shadow-lg">
             <Image
               src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&q=80"
               alt="Richard Yazmajian, licensed plumber and owner of Richards Rooter & Plumbing, inspecting a water heater"
-              width={600}
-              height={500}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover object-center"
               loading="lazy"
-              className="w-full h-auto object-cover"
             />
           </div>
         </div>
