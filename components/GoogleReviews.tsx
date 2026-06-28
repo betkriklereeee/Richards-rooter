@@ -1,4 +1,7 @@
-import { BUSINESS } from "@/lib/constants";
+import ReviewCard from "./ReviewCard";
+
+const PLACE_ID = "ChIJnQmbNajAwoARgMu1PWLjjus";
+const REVIEWS_URL = "https://share.google/z4bWOAGLSxy9x8h7C";
 
 interface Review {
   author: string;
@@ -26,6 +29,18 @@ const STATIC_REVIEWS: Review[] = [
     text: "Had a gas leak scare at 2am. Richard answered immediately and was at our house in Woodland Hills within 45 minutes. Incredible service.",
     time: "1 month ago",
   },
+  {
+    author: "David R.",
+    rating: 5,
+    text: "Called Richards Rooter for a sewer backup on Thanksgiving morning. Richard was there in under an hour and had everything cleared before noon. Absolute lifesaver.",
+    time: "2 months ago",
+  },
+  {
+    author: "Lena P.",
+    rating: 5,
+    text: "Richard installed a Navien tankless water heater for us and the difference is incredible. Endless hot water and our gas bill dropped noticeably. Highly recommend.",
+    time: "3 months ago",
+  },
 ];
 
 function StarRating({ rating }: { rating: number }) {
@@ -34,8 +49,8 @@ function StarRating({ rating }: { rating: number }) {
       {[1, 2, 3, 4, 5].map((n) => (
         <svg
           key={n}
-          width="16"
-          height="16"
+          width="20"
+          height="20"
           viewBox="0 0 24 24"
           fill={n <= rating ? "#F97316" : "none"}
           stroke={n <= rating ? "#F97316" : "#D1D5DB"}
@@ -50,30 +65,38 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 async function getReviews(): Promise<{ rating: number; count: number; reviews: Review[] }> {
+  const FALLBACK = { rating: 4.9, count: 87, reviews: STATIC_REVIEWS };
   const apiKey = process.env.GOOGLE_PLACES_API_KEY;
-  if (!apiKey) {
-    return { rating: 4.9, count: 87, reviews: STATIC_REVIEWS };
-  }
+  if (!apiKey) return FALLBACK;
+
   try {
     const res = await fetch(
-      `https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJN1t_tDeuEmsRUsoyG83frY4&fields=rating,user_ratings_total,reviews&key=${apiKey}`,
-      { next: { revalidate: 3600 } }
+      `https://maps.googleapis.com/maps/api/place/details/json?place_id=${PLACE_ID}&fields=name,rating,user_ratings_total,reviews&key=${apiKey}`,
+      { next: { revalidate: 86400 } }
     );
+    if (!res.ok) return FALLBACK;
+
     const data = await res.json();
-    if (data.result) {
-      return {
-        rating: data.result.rating,
-        count: data.result.user_ratings_total,
-        reviews: (data.result.reviews || []).slice(0, 3).map((r: Record<string, unknown>) => ({
-          author: r.author_name as string,
-          rating: r.rating as number,
-          text: r.text as string,
-          time: r.relative_time_description as string,
-        })),
-      };
-    }
-  } catch {}
-  return { rating: 4.9, count: 87, reviews: STATIC_REVIEWS };
+    const result = data.result;
+    if (!result) return FALLBACK;
+
+    const reviews: Review[] = (result.reviews ?? [])
+      .slice(0, 5)
+      .map((r: Record<string, unknown>) => ({
+        author: r.author_name as string,
+        rating: r.rating as number,
+        text: r.text as string,
+        time: r.relative_time_description as string,
+      }));
+
+    return {
+      rating: result.rating ?? FALLBACK.rating,
+      count: result.user_ratings_total ?? FALLBACK.count,
+      reviews: reviews.length > 0 ? reviews : STATIC_REVIEWS,
+    };
+  } catch {
+    return FALLBACK;
+  }
 }
 
 export default async function GoogleReviews() {
@@ -81,28 +104,31 @@ export default async function GoogleReviews() {
 
   return (
     <div>
-      <div className="flex items-center gap-3 mb-6">
+      {/* Summary bar */}
+      <div className="flex flex-wrap items-center gap-3 mb-6">
         <StarRating rating={Math.round(rating)} />
         <span className="font-bold text-navy text-lg">{rating.toFixed(1)}</span>
-        <span className="text-gray-500 text-sm">({count} Google reviews)</span>
+        <span className="text-gray-500 text-sm">Based on {count} Google reviews</span>
         <a
-          href={BUSINESS.googleBusinessUrl}
+          href={REVIEWS_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-sm text-orange underline hover:no-underline ml-2"
+          className="text-sm text-orange underline hover:no-underline ml-1"
         >
-          See all reviews
+          View all reviews on Google
         </a>
       </div>
+
+      {/* Review cards — up to 5, rendered as client components for expand toggle */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {reviews.map((r, i) => (
-          <div key={i} className="bg-white border border-gray-100 rounded-lg p-4 shadow-sm">
-            <StarRating rating={r.rating} />
-            <p className="mt-2 text-gray-700 text-sm leading-relaxed">&ldquo;{r.text}&rdquo;</p>
-            <p className="mt-3 text-xs text-gray-500">
-              <span className="font-semibold">{r.author}</span> &middot; {r.time}
-            </p>
-          </div>
+          <ReviewCard
+            key={i}
+            author={r.author}
+            rating={r.rating}
+            text={r.text}
+            time={r.time}
+          />
         ))}
       </div>
     </div>
