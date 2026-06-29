@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { BUSINESS, SERVICES, SERVICE_IMAGES } from "@/lib/constants";
 import TrustBadges from "@/components/TrustBadges";
@@ -136,12 +137,13 @@ export default function HomePage() {
               </p>
               <CTAButton variant="secondary" sourcePage="/" />
             </div>
-            <div style={{ position: "relative", height: "320px", width: "100%", overflow: "hidden", borderRadius: "12px" }}>
-              <img
-                src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&q=80"
-                alt="Richard Yazmajian, licensed plumber and owner of Richards Rooter & Plumbing, inspecting a water heater"
-                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
-                loading="lazy"
+            <div style={{ backgroundColor: "#0A1F44", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", height: "400px", padding: "48px" }}>
+              <Image
+                src="/richards-rooter-seal-lockup-dark.png"
+                alt="Richards Rooter & Plumbing — Est. 1994, Los Angeles"
+                width={480}
+                height={200}
+                style={{ objectFit: "contain" }}
               />
             </div>
           </div>

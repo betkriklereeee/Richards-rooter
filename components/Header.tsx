@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { BUSINESS, SERVICES, LOCATIONS } from "@/lib/constants";
 import { fireCallClick } from "@/lib/gtm";
 import CTAButton from "./CTAButton";
@@ -28,12 +29,23 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openGroup, setOpenGroup] = useState<string | null>(null);
 
+  function closeAll() {
+    setMenuOpen(false);
+    setOpenGroup(null);
+  }
+
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm" id="site-header">
-      <nav className="max-w-7xl mx-auto px-4 flex items-center justify-between h-16" aria-label="Main navigation">
-        <Link href="/" className="font-bold text-navy text-lg leading-tight">
-          <span className="sr-only">Richards Rooter and Plumbing — home</span>
-          <span aria-hidden="true">Richards Rooter<br /><span className="text-orange">&amp; Plumbing</span></span>
+      <nav className="max-w-7xl mx-auto px-4 flex items-center justify-between h-20" aria-label="Main navigation">
+        <Link href="/" onClick={closeAll}>
+          <Image
+            src="/richards-rooter-seal-lockup-light.png"
+            alt="Richards Rooter & Plumbing"
+            width={180}
+            height={44}
+            priority
+            style={{ objectFit: "contain" }}
+          />
         </Link>
 
         {/* Desktop nav */}

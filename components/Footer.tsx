@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { BUSINESS, SERVICES, LOCATIONS } from "@/lib/constants";
 
 export default function Footer() {
@@ -6,7 +7,13 @@ export default function Footer() {
     <footer className="bg-navy text-white mt-16">
       <div className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
-          <p className="font-bold text-lg mb-2">Richards Rooter<br /><span className="text-orange">&amp; Plumbing</span></p>
+          <Image
+            src="/richards-rooter-seal-lockup-dark.png"
+            alt="Richards Rooter & Plumbing"
+            width={220}
+            height={50}
+            className="mb-2"
+          />
           <address className="not-italic text-sm text-gray-300 space-y-1">
             <p>{BUSINESS.address.street}</p>
             <p>
@@ -79,7 +86,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-white/10 text-center py-4 text-xs text-gray-400">
-        &copy; {new Date().getFullYear()} Richards Rooter &amp; Plumbing. All rights reserved.
+        <p>© {new Date().getFullYear()} Richards Rooter & Plumbing. All rights reserved.</p>
       </div>
     </footer>
   );
