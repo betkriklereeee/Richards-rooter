@@ -37,14 +37,14 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm" id="site-header">
       <nav className="max-w-7xl mx-auto px-4 flex items-center justify-between h-20" aria-label="Main navigation">
-        <Link href="/" onClick={closeAll}>
+        <Link href="/" onClick={closeAll} className="flex items-center">
           <Image
             src="/richards-rooter-seal-lockup-light.png"
             alt="Richards Rooter & Plumbing"
-            width={180}
-            height={44}
+            width={200}
+            height={48}
             priority
-            style={{ objectFit: "contain" }}
+            style={{ objectFit: "contain", maxHeight: "48px", width: "auto" }}
           />
         </Link>
 
